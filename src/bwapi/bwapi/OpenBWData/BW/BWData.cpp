@@ -17,6 +17,9 @@
 
 #ifdef OPENBW_ENABLE_UI
 #include "ui/ui.h"
+// Capa jugable para humanos (seleccion, ordenes, command card, construccion).
+// Viene del fork heiner/openbw (web/sandbox.h).
+#include "sandbox.h"
 #endif
 
 #include <mutex>

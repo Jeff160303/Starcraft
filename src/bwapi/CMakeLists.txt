@@ -17,6 +17,9 @@ OPTION(OPENBWAPI_BUILD_STATIC_LIBS "Force build OpenBWAPI libs statically")
 
 if (MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  # El codigo y los comentarios de OpenBW llevan UTF-8 (guiones largos, etc.).
+  # Sin /utf-8, MSVC los interpreta con la codepage local y avisa (C4819).
+  add_compile_options(/utf-8)
 endif()
 
 add_subdirectory(bwapi)

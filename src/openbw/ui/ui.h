@@ -31,12 +31,15 @@ struct tileset_image_data {
 	std::array<pcx_image, 7> light_pcx;
 	grp_t creep_grp;
 	int resource_minimap_color;
+	int minimap_border_color;
+	int minimap_flat_color;
 	std::array<uint8_t, 256> cloak_fade_selector;
 };
 
 struct image_data {
 	std::array<std::array<uint8_t, 8>, 16> player_unit_colors;
 	std::array<uint8_t, 16> player_minimap_colors;
+	std::array<uint8_t, 152> blink_colors;
 	std::array<uint8_t, 24> selection_colors;
 	std::array<uint8_t, 24> hp_bar_colors;
 	std::array<int, 0x100> creep_edge_frame_index{};
@@ -168,6 +171,13 @@ void load_image_data(image_data& img, load_data_file_F&& load_data_file) {
 	for (size_t i = 0; i != 16; ++i) {
 		img.player_minimap_colors[i] = tminimap_pcx.data[i];
 	}
+	// 19 rows of 8: per player color, the minimap-dot blink cycle for alerts
+	// (blue flash -> player color bright->dark -> off).
+	auto tblink_pcx = load_pcx_file("game/tblink.pcx");
+	if (tblink_pcx.width != 152 || tblink_pcx.height != 1) error("tblink.pcx dimensions are %dx%d (152x1 required)", tblink_pcx.width, tblink_pcx.height);
+	for (size_t i = 0; i != 152; ++i) {
+		img.blink_colors[i] = tblink_pcx.data[i];
+	}
 	auto tselect_pcx = load_pcx_file("game/tselect.pcx");
 	if (tselect_pcx.width != 24 || tselect_pcx.height != 1) error("tselect.pcx dimensions are %dx%d (24x1 required)", tselect_pcx.width, tselect_pcx.height);
 	for (size_t i = 0; i != 24; ++i) {
@@ -261,6 +271,8 @@ void load_tileset_image_data(tileset_image_data& img, size_t tileset_index, load
 		return best_index;
 	};
 	img.resource_minimap_color = get_nearest_color(0, 255, 255);
+	img.minimap_border_color = get_nearest_color(110, 110, 110);   // subdued gray frame around the minimap
+	img.minimap_flat_color = get_nearest_color(68, 68, 68);        // terrain-off backdrop (Tab toggle)
 
 	for (size_t i = 0; i != 256; ++i) {
 		int r = img.wpe[4 * i + 0];
@@ -557,6 +569,24 @@ struct ui_functions: ui_util_functions {
 	bool create_window = true;
 	bool draw_ui_elements = true;
 
+	// Fog of war: render from one player's perspective. -1 = show everything
+	// (replay/observer, the default). >= 0 = that player's vision: bright where
+	// currently visible, dimmed where explored, black where unexplored.
+	int fog_player = -1;
+	int fog_level = 16;   // dark.pcx darkness row for explored-but-not-visible
+	a_vector<uint8_t> fog_level_grid;   // per-frame scratch for the fog overlay
+	a_vector<uint8_t> fog_blur_grid;    // scratch for the fog-level blur pass
+	int fog_blur_radius = 2;            // tiles; softens the vision boundary (0 = off)
+
+	// Live-play input hook: a subclass may intercept input events (e.g. to issue
+	// unit commands) before the default replay-viewer handling. Returning true
+	// consumes the event. Default: no-op, so the replay viewer is unchanged.
+	virtual bool handle_game_input(const native_window::event_t&) { return false; }
+
+	// Fires after a left-click selection completes (even a same-unit re-click);
+	// a subclass may use it to play selection acks. Default: no-op.
+	virtual void on_selection(bool double_clicked) { (void)double_clicked; }
+
 	bool exit_on_close = true;
 	bool window_closed = false;
 
@@ -633,6 +663,7 @@ struct ui_functions: ui_util_functions {
 
 	virtual void play_sound(int id, xy position, const unit_t* source_unit, bool add_race_index) override {
 		if (global_volume == 0) return;
+		if (!sound_audible(source_unit, position)) return;   // nothing heard through the fog
 		if (add_race_index) id += 1;
 		if ((size_t)id >= has_loaded_sound.size()) return;
 		if (!has_loaded_sound[id]) {
@@ -662,6 +693,8 @@ struct ui_functions: ui_util_functions {
 			int distance_volume = 99 - 99 * distance / 512;
 
 			if (distance_volume > volume) volume = distance_volume;
+		} else {
+			volume = 99;   // global UI sound (no world position): full volume, as the original plays advisor lines
 		}
 
 		if (volume > 10) {
@@ -769,6 +802,150 @@ struct ui_functions: ui_util_functions {
 		return {{from_tile_x, from_tile_y}, {to_tile_x, to_tile_y}};
 	}
 
+
+	// Per-tile darkness level for fog_player: 31 = visible (bright), fog_level =
+	// explored but not currently seen, 0 = unexplored (black). tile.visible /
+	// .explored are bitmasks where the player's bit SET = hidden (tiles init to
+	// 0xff; revealing clears the bit). Off-map reads as unexplored.
+	int fog_tile_level(int tx, int ty, uint8_t mask) const {
+		if (tx < 0 || ty < 0 || tx >= (int)game_st.map_tile_width || ty >= (int)game_st.map_tile_height) return 0;
+		const auto& t = st.tiles[(size_t)ty * game_st.map_tile_width + tx];
+		if ((t.visible & mask) == 0) return 31;
+		if ((t.explored & mask) == 0) return fog_level;
+		return 0;
+	}
+
+	// Smooth fog-of-war overlay. Instead of darkening each 32x32 tile uniformly
+	// (hard edges), we bilinearly interpolate the per-tile darkness level —
+	// sampled at tile centers — across every pixel, then remap through dark.pcx.
+	// This yields a soft gradient at vision boundaries. Applied over terrain and
+	// sprites, so anything in the dark is dimmed together.
+	void draw_fog(uint8_t* data, size_t data_pitch) {
+		uint8_t mask = (uint8_t)(1 << fog_player);
+		const uint8_t* dark = tileset_img.dark_pcx.data.data();
+
+		// Build a level grid covering the visible tiles plus a one-tile border,
+		// so the bilinear taps (tile and tile+1) never read out of bounds.
+		auto tb = screen_tile_bounds();
+		int base_tx = (int)tb.from.x - 1, base_ty = (int)tb.from.y - 1;
+		int gw = (int)(tb.to.x - tb.from.x) + 3;
+		int gh = (int)(tb.to.y - tb.from.y) + 3;
+		fog_level_grid.resize((size_t)gw * gh);
+		int mw = (int)game_st.map_tile_width, mh = (int)game_st.map_tile_height;
+		for (int gy = 0; gy != gh; ++gy)
+			for (int gx = 0; gx != gw; ++gx) {
+				// Clamp samples to the map edge, so tiles beyond the map (which read as
+				// unexplored/black) don't darken the real edge terrain via the blur/lerp.
+				int tx = base_tx + gx, ty = base_ty + gy;
+				tx = tx < 0 ? 0 : tx >= mw ? mw - 1 : tx;
+				ty = ty < 0 ? 0 : ty >= mh ? mh - 1 : ty;
+				fog_level_grid[(size_t)gy * gw + gx] = (uint8_t)fog_tile_level(tx, ty, mask);
+			}
+
+		// Soften the per-tile levels with a small separable box blur before interpolating,
+		// so the vision boundary is a smooth curve instead of tracing the 32px tile grid
+		// (hides the "block structure"). Uniform interior regions are left unchanged, so
+		// only boundaries feather. Clamped at the grid edge (a tile off-screen).
+		if (int R = fog_blur_radius) {
+			fog_blur_grid.resize((size_t)gw * gh);
+			int win = 2 * R + 1;
+			for (int gy = 0; gy != gh; ++gy) {   // horizontal pass -> fog_blur_grid
+				const uint8_t* src = &fog_level_grid[(size_t)gy * gw];
+				uint8_t* dst = &fog_blur_grid[(size_t)gy * gw];
+				for (int gx = 0; gx != gw; ++gx) {
+					int s = 0;
+					for (int dx = -R; dx <= R; ++dx) {
+						int xx = gx + dx; if (xx < 0) xx = 0; else if (xx >= gw) xx = gw - 1;
+						s += src[xx];
+					}
+					dst[gx] = (uint8_t)(s / win);
+				}
+			}
+			for (int gx = 0; gx != gw; ++gx) {   // vertical pass -> fog_level_grid
+				for (int gy = 0; gy != gh; ++gy) {
+					int s = 0;
+					for (int dy = -R; dy <= R; ++dy) {
+						int yy = gy + dy; if (yy < 0) yy = 0; else if (yy >= gh) yy = gh - 1;
+						s += fog_blur_grid[(size_t)yy * gw + gx];
+					}
+					fog_level_grid[(size_t)gy * gw + gx] = (uint8_t)(s / win);
+				}
+			}
+		}
+
+		for (int sy = 0; sy != (int)screen_height; ++sy) {
+			int my = screen_pos.y + sy - 16;               // tile centers sit at +16
+			int ty = my >= 0 ? my / 32 : -((-my + 31) / 32);
+			int fy = my - ty * 32;                         // 0..31 within the cell
+			int gy = ty - base_ty;
+			if (gy < 0) gy = 0; else if (gy > gh - 2) gy = gh - 2;
+			const uint8_t* g0 = &fog_level_grid[(size_t)gy * gw];
+			const uint8_t* g1 = g0 + gw;
+			uint8_t* row = data + (size_t)sy * data_pitch;
+			for (int sx = 0; sx != (int)screen_width; ++sx) {
+				int mx = screen_pos.x + sx - 16;
+				int tx = mx >= 0 ? mx / 32 : -((-mx + 31) / 32);
+				int fx = mx - tx * 32;
+				int gx = tx - base_tx;
+				if (gx < 0) gx = 0; else if (gx > gw - 2) gx = gw - 2;
+				int top = g0[gx] * (32 - fx) + g0[gx + 1] * fx;
+				int bot = g1[gx] * (32 - fx) + g1[gx + 1] * fx;
+				int level = (top * (32 - fy) + bot * fy) >> 10;   // / (32*32)
+				if (level >= 31) continue;                        // fully lit
+				row[sx] = dark[256 * level + row[sx]];
+			}
+		}
+	}
+
+	// Is a sprite's tile explored by fog_player? (Used to hide sprites in the
+	// black unexplored area.) True when fog is off.
+	bool sprite_position_explored(const sprite_t* sprite) const {
+		if (fog_player < 0) return true;
+		xy pos = sprite->position;
+		if (pos.x < 0 || pos.y < 0) return false;
+		// fog_tile_level returns 0 only for unexplored (or off-map) tiles.
+		return fog_tile_level(pos.x / 32, pos.y / 32, (uint8_t)(1 << fog_player)) != 0;
+	}
+
+	// Structures and resources persist in fog as a frozen last-seen snapshot; mobile
+	// units vanish. See unit_hidden_by_fog / draw_sprites.
+	bool unit_persists_in_fog(const unit_t* u) const {
+		return ut_building(u) || unit_is_mineral_field(u) || unit_is(u, UnitTypes::Resource_Vespene_Geyser);
+	}
+
+	// BW hides units the moment they leave your vision. Your own units are always shown;
+	// persistent things you've explored are frozen (unit_frozen_by_fog), not hidden;
+	// everything else in fog vanishes. Governs rendering, selection, and sound.
+	bool unit_hidden_by_fog(const unit_t* u) const {
+		if (fog_player < 0) return false;
+		if (u->owner == fog_player) return false;
+		if (u->sprite->visibility_flags & (1 << fog_player)) return false;
+		if (unit_persists_in_fog(u)) return !sprite_position_explored(u->sprite);
+		return true;
+	}
+
+	// Enemy structure/resource sitting in explored fog: draw it, but frozen at the
+	// frame it had when last seen (BW's fog-sprite snapshot).
+	bool unit_frozen_by_fog(const unit_t* u) const {
+		if (fog_player < 0 || u->owner == fog_player) return false;
+		if (u->sprite->visibility_flags & (1 << fog_player)) return false;
+		return unit_persists_in_fog(u) && sprite_position_explored(u->sprite);
+	}
+
+	// You only hear what you can currently see. A sound's source is either a unit (hear it
+	// when it's in your vision — note a fog-frozen building is not) or a bare map position
+	// for iscript/weapon sounds; global UI sounds carry no position and always play.
+	bool sound_audible(const unit_t* source_unit, xy position) const {
+		if (fog_player < 0) return true;
+		if (source_unit) {
+			if (source_unit->owner == fog_player) return true;
+			return (source_unit->sprite->visibility_flags & (1 << fog_player)) != 0;
+		}
+		if (position.x <= 0 || position.y <= 0) return true;   // global sound (no position)
+		if ((size_t)(position.x / 32) >= game_st.map_tile_width) return true;
+		if ((size_t)(position.y / 32) >= game_st.map_tile_height) return true;
+		return player_position_is_visible(fog_player, position);
+	}
 
 	void draw_tiles(uint8_t* data, size_t data_pitch) {
 
@@ -977,6 +1154,13 @@ struct ui_functions: ui_util_functions {
 
 	a_vector<const unit_t*> current_selection_sprites_set = a_vector<const unit_t*>(2500);
 	a_vector<const sprite_t*> current_selection_sprites;
+	a_vector<uint8_t> fog_hidden_sprite = a_vector<uint8_t>(2500);   // sprite index -> fog-hidden
+	a_vector<uint8_t> fog_frozen_sprite = a_vector<uint8_t>(2500);   // sprite index -> draw frozen
+	struct fog_snapshot_t {
+		bool valid = false;
+		a_vector<image_t> images;   // last-seen images, in draw order
+	};
+	a_vector<fog_snapshot_t> fog_snapshots = a_vector<fog_snapshot_t>(2500);
 
 	void draw_selection_circle(const sprite_t* sprite, const unit_t* u, uint8_t* data, size_t data_pitch) {
 		auto* image_type = get_image_type((ImageTypes)((int)ImageTypes::IMAGEID_Selection_Circle_22pixels + sprite->sprite_type->selection_circle));
@@ -1013,7 +1197,9 @@ struct ui_functions: ui_util_functions {
 		width = std::min(width, screen_width - screen_x);
 		height = std::min(height, screen_height - screen_y);
 
-		size_t color_index = st.players[sprite->owner].color;
+		// Colour the ring by the unit's owner, not the sprite's: an abandoned addon keeps its
+		// old body colour (sprite owner) but belongs to neutral, whose ring is yellow.
+		size_t color_index = st.players[u->owner].color;
 		uint8_t color = img.player_unit_colors.at(color_index)[0];
 		if (unit_is_mineral_field(u) || unit_is(u, UnitTypes::Resource_Vespene_Geyser)) {
 			color = tileset_img.resource_minimap_color;
@@ -1200,7 +1386,7 @@ struct ui_functions: ui_util_functions {
 
 	}
 
-	void draw_sprite(const sprite_t* sprite, uint8_t* data, size_t data_pitch) {
+	virtual void draw_sprite(const sprite_t* sprite, uint8_t* data, size_t data_pitch) {
 		const unit_t* draw_selection_u = current_selection_sprites_set.at(sprite->index);
 		const unit_t* draw_health_bars_u = draw_selection_u;
 		for (auto* image : ptr(reverse(sprite->images))) {
@@ -1213,6 +1399,32 @@ struct ui_functions: ui_util_functions {
 		}
 		if (draw_health_bars_u && !u_invincible(draw_health_bars_u)) {
 			draw_health_bars(sprite, draw_health_bars_u, data, data_pitch);
+		}
+	}
+
+	// Copy a structure/resource's images while it's visible, so the exact last-seen
+	// picture (frozen mid-animation) can be replayed once it drops back into fog. The
+	// live sim keeps spawning/retiring overlays (e.g. geyser steam) — a frame freeze
+	// isn't enough, we have to keep our own static copy.
+	void snapshot_fog_sprite(const sprite_t* sprite) {
+		auto& snap = fog_snapshots.at(sprite->index);
+		snap.valid = true;
+		snap.images.clear();
+		for (const image_t* image : ptr(reverse(sprite->images))) {
+			if (i_flag(image, image_t::flag_hidden)) continue;
+			snap.images.push_back(*image);
+		}
+	}
+
+	// Draw the frozen snapshot of a fogged structure/resource. Something at an explored
+	// spot we never actually saw (built in fog) has no snapshot and stays hidden. The
+	// structure doesn't move, so the live sprite's position still places the copy.
+	void draw_fog_snapshot(const sprite_t* live, uint8_t* data, size_t data_pitch) {
+		auto& snap = fog_snapshots.at(live->index);
+		if (!snap.valid) return;
+		for (image_t& image : snap.images) {
+			image.sprite = const_cast<sprite_t*>(live);
+			draw_image(&image, data, data_pitch, st.players[live->owner].color);
 		}
 	}
 
@@ -1248,9 +1460,28 @@ struct ui_functions: ui_util_functions {
 			current_selection_sprites.push_back(u->sprite);
 		}
 
+		if (fog_player >= 0)
+			for (size_t i = 0; i != 12; ++i)
+				for (unit_t* u : ptr(st.player_units[i])) {
+					if (unit_hidden_by_fog(u)) fog_hidden_sprite.at(u->sprite->index) = 1;
+					else if (unit_frozen_by_fog(u)) fog_frozen_sprite.at(u->sprite->index) = 1;
+					else if (u->owner != fog_player && unit_persists_in_fog(u)) snapshot_fog_sprite(u->sprite);
+				}
+
 		for (auto& v : sorted_sprites) {
+			if (fog_player >= 0) {
+				if (!sprite_position_explored(v.second) || fog_hidden_sprite[v.second->index]) continue;
+				if (fog_frozen_sprite[v.second->index]) { draw_fog_snapshot(v.second, data, data_pitch); continue; }
+			}
 			draw_sprite(v.second, data, data_pitch);
 		}
+
+		if (fog_player >= 0)
+			for (size_t i = 0; i != 12; ++i)
+				for (unit_t* u : ptr(st.player_units[i])) {
+					fog_hidden_sprite.at(u->sprite->index) = 0;
+					fog_frozen_sprite.at(u->sprite->index) = 0;
+				}
 
 		for (auto* s : current_selection_sprites) {
 			current_selection_sprites_set.at(s->index) = nullptr;
@@ -1328,6 +1559,10 @@ struct ui_functions: ui_util_functions {
 		} else if (game_st.map_height < game_st.map_width) {
 			minimap_height = minimap_height * minimap_height * game_st.map_tile_height / (minimap_width* game_st.map_tile_width);
 		}
+		if (minimap_scale > 1) {
+			minimap_width = (size_t)(minimap_width / minimap_scale + 0.5);
+			minimap_height = (size_t)(minimap_height / minimap_scale + 0.5);
+		}
 		if (screen_width < minimap_width || screen_height < minimap_height) return {};
 		int map_screen_x = 4;
 		int map_screen_y = screen_height - 4 - minimap_height;
@@ -1337,29 +1572,46 @@ struct ui_functions: ui_util_functions {
 		return area;
 	}
 
-	void draw_minimap(uint8_t* data, size_t data_pitch) {
+	bool minimap_terrain = true;
+	// View zoom: the host renders the frame at window/zoom and upscales, so the
+	// minimap is drawn at 1/scale to come out at a constant on-screen size. The
+	// click mappings (move_minimap etc.) are ratio-based and adapt automatically.
+	double minimap_scale = 1;
+
+	virtual void draw_minimap(uint8_t* data, size_t data_pitch) {
 		auto area = get_minimap_area();
-		size_t minimap_width = area.to.x - area.from.x;
-		size_t minimap_height = area.to.y - area.from.y;
-		if (minimap_width != game_st.map_tile_width) return;
-		if (minimap_height != game_st.map_tile_height) return;
+		size_t mw = area.to.x - area.from.x;
+		size_t mh = area.to.y - area.from.y;
+		size_t tw = game_st.map_tile_width, th = game_st.map_tile_height;
+		if (!mw || !mh || area.from == area.to) return;
 		fill_rectangle(data, data_pitch, area, 0);
-		line_rectangle(data, data_pitch, {area.from - xy(1, 1), area.to + xy(1, 1)}, 0);
+		line_rectangle(data, data_pitch, {area.from - xy(1, 1), area.to + xy(1, 1)}, (uint8_t)tileset_img.minimap_border_color);
 
 		uint8_t* p = data + data_pitch * (size_t)area.from.y + (size_t)area.from.x;
 
-		size_t pitch = data_pitch - game_st.map_tile_width;
-		for (size_t y = 0; y != game_st.map_tile_height; ++y) {
-			for (size_t x = 0; x != game_st.map_tile_width; ++x) {
-				size_t index;
-				if (~st.tiles[y * game_st.map_tile_width + x].flags & tile_t::flag_has_creep) index = st.tiles_mega_tile_index[y * game_st.map_tile_width + x];
-				else index = game_st.cv5.at(1).mega_tile_index[creep_random_tile_indices[y * game_st.map_tile_width + x]];
-				auto* images = &tileset_img.vx4.at(index).images[0];
-				auto* bitmap = &tileset_img.vr4.at(*images / 2).bitmap[0];
-				auto val = bitmap[55 / sizeof(vr4_entry::bitmap_t)];
-				size_t shift = 8 * (55 % sizeof(vr4_entry::bitmap_t));
-				val >>= shift;
-				*p++ = (uint8_t)val;
+		size_t pitch = data_pitch - mw;
+		uint8_t fog_mask = fog_player >= 0 ? (uint8_t)(1 << fog_player) : 0;
+		for (size_t y = 0; y != mh; ++y) {
+			size_t ty = y * th / mh;
+			for (size_t x = 0; x != mw; ++x) {
+				size_t tx = x * tw / mw;
+				uint8_t out;
+				if (minimap_terrain) {
+					size_t index;
+					if (~st.tiles[ty * tw + tx].flags & tile_t::flag_has_creep) index = st.tiles_mega_tile_index[ty * tw + tx];
+					else index = game_st.cv5.at(1).mega_tile_index[creep_random_tile_indices[ty * tw + tx]];
+					auto* images = &tileset_img.vx4.at(index).images[0];
+					auto* bitmap = &tileset_img.vr4.at(*images / 2).bitmap[0];
+					auto val = bitmap[55 / sizeof(vr4_entry::bitmap_t)];
+					size_t shift = 8 * (55 % sizeof(vr4_entry::bitmap_t));
+					val >>= shift;
+					out = (uint8_t)val;
+				} else {
+					out = (uint8_t)tileset_img.minimap_flat_color;
+				}
+				if (fog_player >= 0)
+					out = tileset_img.dark_pcx.data[256 * fog_tile_level((int)tx, (int)ty, fog_mask) + out];
+				*p++ = out;
 			}
 			p += pitch;
 		}
@@ -1368,6 +1620,7 @@ struct ui_functions: ui_util_functions {
 			--i;
 			for (unit_t* u : ptr(st.player_units[i])) {
 				if (!unit_visble_on_minimap(u)) continue;
+				if (unit_hidden_by_fog(u)) continue;
 				int color = img.player_minimap_colors.at(st.players[u->owner].color);
 				size_t w = u->unit_type->placement_size.x / 32u;
 				size_t h = u->unit_type->placement_size.y / 32u;
@@ -1380,16 +1633,20 @@ struct ui_functions: ui_util_functions {
 				}
 				if (w < 2) w = 2;
 				if (h < 2) h = 2;
+				w = std::max<size_t>(1, w * mw / tw);
+				h = std::max<size_t>(1, h * mh / th);
+				xy tp = (u->sprite->position - u->unit_type->placement_size / 2) / 32u;
 				rect unit_area;
-				unit_area.from = area.from + (u->sprite->position - u->unit_type->placement_size / 2) / 32u;
+				unit_area.from = area.from + xy((int)((size_t)tp.x * mw / tw), (int)((size_t)tp.y * mh / th));
 				unit_area.to = unit_area.from + xy(w, h);
 				fill_rectangle(data, data_pitch, unit_area, color);
 			}
 		}
 
 		rect view_rect;
-		view_rect.from = area.from + xy(screen_pos.x / 32u, screen_pos.y / 32u);
-		view_rect.to = view_rect.from + xy((view_width + 31) / 32u, (view_height + 31) / 32u);
+		view_rect.from = area.from + xy((int)((size_t)(screen_pos.x / 32u) * mw / tw), (int)((size_t)(screen_pos.y / 32u) * mh / th));
+		view_rect.to = view_rect.from + xy(std::max<size_t>(1, (size_t)((view_width + 31) / 32u) * mw / tw),
+		                                   std::max<size_t>(1, (size_t)((view_height + 31) / 32u) * mh / th));
 		line_rectangle(data, data_pitch, view_rect, 255);
 
 	}
@@ -1797,11 +2054,13 @@ struct ui_functions: ui_util_functions {
 				}
 			}
 			is_drag_selecting = false;
+			on_selection(double_clicked);
 		};
 
 		if (wnd) {
 			native_window::event_t e;
 			while (wnd.peek_message(e)) {
+				if (handle_game_input(e)) continue;
 				switch (e.type) {
 				case native_window::event_t::type_quit:
 					if (exit_on_close) std::exit(0);
@@ -1946,6 +2205,7 @@ struct ui_functions: ui_util_functions {
 		uint8_t* data = (uint8_t*)indexed_surface->lock();
 		draw_tiles(data, indexed_surface->pitch);
 		draw_sprites(data, indexed_surface->pitch);
+		if (fog_player >= 0) draw_fog(data, indexed_surface->pitch);
 
 		draw_callback(data, indexed_surface->pitch);
 
