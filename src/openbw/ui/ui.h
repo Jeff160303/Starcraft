@@ -1,3 +1,8 @@
+// Nota (nuestro repo): el ui.h original no trae guarda de inclusion. Aqui lo
+// incluye BWData.cpp directamente y ademas sandbox.h, asi que sin esto el
+// archivo se define dos veces y MSVC desarma la clase ui_functions.
+#pragma once
+
 #include "common.h"
 #include "../bwgame.h"
 #include "../replay.h"

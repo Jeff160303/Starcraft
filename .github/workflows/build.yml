@@ -106,6 +106,18 @@ jobs:
         shell: pwsh
         run: |
           $parts = @()
+          # Los PRIMEROS errores son los que explican la causa; los ultimos 200
+          # suelen ser solo el efecto en cascada. Guardamos ambos.
+          $buildLog = Join-Path $env:RUNNER_TEMP 'build.log'
+          if (Test-Path $buildLog) {
+            $errs = Get-Content $buildLog | Select-String -Pattern 'error C|error LNK|error MSB|fatal error|error :' | Select-Object -First 150
+            if ($errs.Count -gt 0) {
+              $parts += "### Primeros $($errs.Count) errores"
+              $parts += '```'
+              $parts += ($errs | ForEach-Object { $_.Line.Trim() })
+              $parts += '```'
+            }
+          }
           foreach ($f in @('configure.log', 'build.log')) {
             $p = Join-Path $env:RUNNER_TEMP $f
             if (Test-Path $p) {
