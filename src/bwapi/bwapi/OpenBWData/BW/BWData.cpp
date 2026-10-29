@@ -877,9 +877,18 @@ struct openbwapi_impl {
     if (ui) {
       // Lo que el humano ordeno (clic derecho, command card, grupos) entra al
       // lockstep como bytes de comando, igual que las ordenes de un bot.
+      // play_ui los agrupa como [u16 tamano][op][datos]..., pero input_action()
+      // espera UNA accion por llamada ([op][datos]), asi que se separan aqui.
       if (!vars.is_replay) {
         ui->drain_commands([this](const uint8_t* data, size_t size) {
-          game_setup_helper.input_action(data, size);
+          size_t i = 0;
+          while (i + 2 <= size) {
+            size_t n = (size_t)data[i] | ((size_t)data[i + 1] << 8);
+            i += 2;
+            if (n == 0 || i + n > size) break;
+            game_setup_helper.input_action(data + i, n);
+            i += n;
+          }
         });
       }
       auto l = ui->get_lock();

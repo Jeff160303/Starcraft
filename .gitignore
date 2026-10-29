@@ -4,6 +4,7 @@
 # Binarios compilados
 /dist/
 /build/
+/build-local/
 
 # Descargas temporales
 *.zip
