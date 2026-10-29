@@ -7,6 +7,16 @@
 #include <array>
 #include <type_traits>
 
+// MSVC 19.5x (VS 2026) ya no incluye <stdexcept> de forma transitiva.
+#include <stdexcept>
+#include <string>
+#include <vector>
+#include <memory>
+#include <algorithm>
+#include <cstring>
+#include <functional>
+#include <utility>
+
 #include "containers.h"
 #include "strf.h"
 
