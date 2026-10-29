@@ -41,9 +41,9 @@ to suppress it.
 -- Looking for pthread_create in pthread
 -- Looking for pthread_create in pthread - not found
 -- Found Threads: TRUE
--- Configuring done (23.1s)
-CMake Warning (unused-cli):
+-- Configuring done (19.8s)
 -- Generating done (0.1s)
+CMake Warning (unused-cli):
   Manually-specified variables were not used by the project:
 
     CMAKE_BUILD_TYPE
@@ -205,8 +205,8 @@ D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(508,21): error C1003: error count 
   BWAPILIB.vcxproj -> D:\a\Starcraft\Starcraft\build\lib\Release\BWAPILIB.lib
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/ExampleAIModule/CMakeLists.txt
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/TestAIModule/CMakeLists.txt
-  AttackMoveTest.cpp
   Dll.cpp
+  AttackMoveTest.cpp
   AttackUnitTest.cpp
   ExampleAIModule.cpp
   BuildingPlacer.cpp
