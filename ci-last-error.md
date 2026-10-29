@@ -42,8 +42,8 @@ to suppress it.
 -- Looking for pthread_create in pthread - not found
 -- Found Threads: TRUE
 -- Configuring done (17.1s)
--- Generating done (0.1s)
 CMake Warning (unused-cli):
+-- Generating done (0.2s)
   Manually-specified variables were not used by the project:
 
     CMAKE_BUILD_TYPE
@@ -53,7 +53,6 @@ CMake Warning (unused-cli):
 ```
 ### build.log (ultimas 200 de 638 lineas)
 ```
-          ]
   
 D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(433,50): warning C4267: 'argument': conversion from 'size_t' to 'T', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
 D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(433,50): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
@@ -69,7 +68,7 @@ D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(436,30): warning C4267:      
 D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(436,30): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-  Filters.cpp
+  ExplosionType.cpp
 D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(380,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
       D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(380,32):
@@ -106,7 +105,7 @@ D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(388,37): warning C4267: 'argu
 D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(391,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-  Forceset.cpp
+  Filters.cpp
 D:\a\Starcraft\Starcraft\src\openbw\sync.h(727,63): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
       D:\a\Starcraft\Starcraft\src\openbw\sync.h(727,63):
@@ -166,6 +165,7 @@ D:\a\Starcraft\Starcraft\src\openbw\sync.h(764,30): warning C4244: '=': conversi
 D:\a\Starcraft\Starcraft\src\openbw\sync.h(766,24): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
+  Forceset.cpp
   Game.cpp
   GameType.cpp
   Order.cpp
@@ -184,18 +184,18 @@ D:\a\Starcraft\Starcraft\src\openbw\sync.h(766,24): warning C4267: '=': conversi
   Unitset.cpp
   UnitCommandType.cpp
   UnitSizeType.cpp
-  UnitType.cpp
   Auto build dll exports
-  UpgradeType.cpp
-  WeaponType.cpp
+  UnitType.cpp
      Creating library D:/a/Starcraft/Starcraft/build/lib/Release/OpenBWData.lib and object D:/a/Starcraft/Starcraft/build/lib/Release/OpenBWData.exp
-  Generating Code...
+  UpgradeType.cpp
   OpenBWData.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\OpenBWData.dll
+  WeaponType.cpp
+  Generating Code...
   BWAPILIB.vcxproj -> D:\a\Starcraft\Starcraft\build\lib\Release\BWAPILIB.lib
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/TestAIModule/CMakeLists.txt
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/ExampleAIModule/CMakeLists.txt
-  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/BWAPI/CMakeLists.txt
   Dll.cpp
+  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/BWAPI/CMakeLists.txt
   AttackMoveTest.cpp
   Auto build dll exports
      Creating library D:/a/Starcraft/Starcraft/build/lib/Release/BWAPI.lib and object D:/a/Starcraft/Starcraft/build/lib/Release/BWAPI.exp
@@ -203,16 +203,16 @@ D:\a\Starcraft\Starcraft\src\openbw\sync.h(766,24): warning C4267: '=': conversi
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/BWAPIClient/CMakeLists.txt
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/BWAPILauncher/CMakeLists.txt
   Client.cpp
-  Main.cpp
   AttackUnitTest.cpp
+  Main.cpp
   BWAPIClient.vcxproj -> D:\a\Starcraft\Starcraft\build\lib\Release\BWAPIClient.lib
   ExampleAIModule.cpp
   BuildingPlacer.cpp
-  Generating Code...
   BWAPILauncher.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\BWAPILauncher.exe
+  Generating Code...
      Creating library D:/a/Starcraft/Starcraft/build/lib/Release/ExampleAIModule.lib and object D:/a/Starcraft/Starcraft/build/lib/Release/ExampleAIModule.exp
-  BuildTest.cpp
   ExampleAIModule.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\ExampleAIModule.dll
+  BuildTest.cpp
   BurrowTest.cpp
   BWAssert.cpp
   CancelConstructionTest.cpp
