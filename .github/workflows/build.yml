@@ -32,13 +32,19 @@ jobs:
       - name: Configurar CMake
         shell: pwsh
         run: |
-          $out = & cmake -S src/bwapi -B build -A x64 `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 `
-            -DOPENBW_DIR="${{ github.workspace }}/src/openbw" `
-            -DOPENBW_ENABLE_UI=ON `
-            -DSDL2_INCLUDE_DIR="$env:SDL2_DIR/include" `
-            -DSDL2_LIBRARY="$env:SDL2_DIR/lib/x64/SDL2.lib" 2>&1
+          # Los argumentos van en un array para que PowerShell no parta nada.
+          $cmakeArgs = @(
+            '-S', 'src/bwapi',
+            '-B', 'build',
+            '-A', 'x64',
+            '-DCMAKE_BUILD_TYPE=Release',
+            '-DCMAKE_POLICY_VERSION_MINIMUM=3.5',
+            "-DOPENBW_DIR=${{ github.workspace }}/src/openbw",
+            '-DOPENBW_ENABLE_UI=ON',
+            "-DSDL2_INCLUDE_DIR=$env:SDL2_DIR/include",
+            "-DSDL2_LIBRARY=$env:SDL2_DIR/lib/x64/SDL2.lib"
+          )
+          $out = & cmake @cmakeArgs 2>&1
           $code = $LASTEXITCODE
           $out | Tee-Object -FilePath "$env:RUNNER_TEMP\configure.log"
           if ($code -ne 0) { exit $code }
@@ -67,8 +73,8 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-      # Si algo falla, volcamos el log en el resumen del job para poder leerlo
-      # sin autenticacion (actions/download-artifact y /logs piden credenciales).
+      # Si algo falla, dejamos el log en el resumen del job y en el repo:
+      # /actions/jobs/<id>/logs exige autenticacion, el repo no.
       - name: Resumen del error
         if: failure()
         shell: pwsh
@@ -78,7 +84,7 @@ jobs:
             $p = Join-Path $env:RUNNER_TEMP $f
             if (Test-Path $p) {
               $lines = Get-Content $p
-              $tail = $lines | Select-Object -Last 120
+              $tail = $lines | Select-Object -Last 200
               $parts += "### $f (ultimas $($tail.Count) de $($lines.Count) lineas)"
               $parts += '```'
               $parts += $tail
@@ -90,9 +96,7 @@ jobs:
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $summary
           Set-Content -Path "ci-last-error.md" -Value $summary -Encoding utf8
 
-      # Deja el log en el repo: /actions/jobs/<id>/logs exige autenticacion,
-      # asi que esta es la forma de poder leerlo desde fuera. Los push hechos
-      # con GITHUB_TOKEN no vuelven a disparar workflows, no hay bucle.
+      # Los push hechos con GITHUB_TOKEN no vuelven a disparar workflows: no hay bucle.
       - name: Guardar log en el repositorio
         if: failure()
         shell: pwsh
