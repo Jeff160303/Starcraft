@@ -29,17 +29,24 @@ jobs:
       - name: Configurar CMake
         shell: pwsh
         run: |
-          cmake -S src/bwapi -B build -A x64 `
+          $out = & cmake -S src/bwapi -B build -A x64 `
             -DCMAKE_BUILD_TYPE=Release `
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5 `
             -DOPENBW_DIR="${{ github.workspace }}/src/openbw" `
             -DOPENBW_ENABLE_UI=ON `
             -DSDL2_INCLUDE_DIR="$env:SDL2_DIR/include" `
-            -DSDL2_LIBRARY="$env:SDL2_DIR/lib/x64/SDL2.lib"
+            -DSDL2_LIBRARY="$env:SDL2_DIR/lib/x64/SDL2.lib" 2>&1
+          $code = $LASTEXITCODE
+          $out | Tee-Object -FilePath "$env:RUNNER_TEMP\configure.log"
+          if ($code -ne 0) { exit $code }
 
       - name: Compilar
         shell: pwsh
-        run: cmake --build build --config Release --parallel
+        run: |
+          $out = & cmake --build build --config Release --parallel 2>&1
+          $code = $LASTEXITCODE
+          $out | Tee-Object -FilePath "$env:RUNNER_TEMP\build.log"
+          if ($code -ne 0) { exit $code }
 
       - name: Empaquetar
         shell: pwsh
@@ -56,3 +63,26 @@ jobs:
           name: openbw-win64
           path: dist/
           if-no-files-found: error
+
+      # Si algo falla, volcamos el log en el resumen del job para poder leerlo
+      # sin autenticacion (actions/download-artifact y /logs piden credenciales).
+      - name: Resumen del error
+        if: failure()
+        shell: pwsh
+        run: |
+          $parts = @()
+          foreach ($f in @('configure.log', 'build.log')) {
+            $p = Join-Path $env:RUNNER_TEMP $f
+            if (Test-Path $p) {
+              $lines = Get-Content $p
+              $tail = $lines | Select-Object -Last 120
+              $parts += "### $f (ultimas $($tail.Count) de $($lines.Count) lineas)"
+              $parts += '```'
+              $parts += $tail
+              $parts += '```'
+            }
+          }
+          if ($parts.Count -eq 0) { $parts = @('No se genero ningun log.') }
+          $summary = $parts -join "`n"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $summary
+          Set-Content -Path "ci-last-error.md" -Value $summary -Encoding utf8
