@@ -1,8 +1,13 @@
-commit: 16eadb2f815f1d3c5b7ca068176071b57ad61f3d
+commit: ea1f6ec92bbdfa09835bbc202b22d6db947ba11c
 resultado: failure
-fecha: 2026-10-29T03:26:57Z
+fecha: 2026-10-29T03:31:47Z
 
 Log (ultimas lineas de configure/build):
+### Primeros 2 errores
+```
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1373,3): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1738,4): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+```
 ### configure.log (ultimas 50 de 50 lineas)
 ```
 -- Building for: Visual Studio 18 2026
@@ -46,7 +51,7 @@ to suppress it.
 -- Looking for pthread_create in pthread
 -- Looking for pthread_create in pthread - not found
 -- Found Threads: TRUE
--- Configuring done (19.8s)
+-- Configuring done (23.1s)
 -- Generating done (0.1s)
 CMake Warning (unused-cli):
   Manually-specified variables were not used by the project:
@@ -56,131 +61,131 @@ CMake Warning (unused-cli):
 
 -- Build files have been written to: D:/a/Starcraft/Starcraft/build
 ```
-### build.log (ultimas 200 de 713 lineas)
+### build.log (ultimas 200 de 409 lineas)
 ```
-      while trying to match the argument list '(bwgame::xy, bool)'
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(418,22): error C3861: 'get_unit_id': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(418,8): error C2660: 'bwgame::bw_cmd::order': function does not take 3 arguments [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-      D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(175,7):
-      see declaration of 'bwgame::bw_cmd::order'
-      D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(418,8):
-      while trying to match the argument list '(bwgame::Orders, bwgame::xy, bool)'
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(438,19): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1851,70): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(438,13): error C3531: 'uid': a symbol whose type contains 'auto' must have an initializer [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1851,62): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(438,17): error C2143: syntax error: missing ';' before ':' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1854,54): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(438,36): error C2143: syntax error: missing ';' before ')' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1854,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(440,16): error C3861: 'get_unit': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,91): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(441,47): error C3861: 'get_unit_id': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,83): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(453,17): error C3861: 'get_unit_id': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,71): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(458,19): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,50): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(458,13): error C3531: 'uid': a symbol whose type contains 'auto' must have an initializer [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1977,35): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(458,17): error C2143: syntax error: missing ';' before ':' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1978,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(458,36): error C2143: syntax error: missing ';' before ')' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(459,16): error C3861: 'get_unit': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(471,3): error C3861: 'play_sound': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(477,7): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(477,38): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2151,77): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(479,7): error C2065: 'fog_player': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2151,63): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(481,20): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267: '=': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(481,14): error C3531: 'uid': a symbol whose type contains 'auto' must have an initializer [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267: '=': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(481,18): error C2143: syntax error: missing ';' before ':' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(481,37): error C2143: syntax error: missing ';' before ')' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(481,53): error C3861: 'get_unit': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1373,3): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(481,78): error C3861: 'unit_hidden_by_fog': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1738,4): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(482,22): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1897,9): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(483,5): error C3861: 'current_selection_clear': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1897,23): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(484,27): error C3861: 'current_selection_add': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  Error.cpp
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(2533,10): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(492,20): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(2533,29): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(492,14): error C3531: 'uid': a symbol whose type contains 'auto' must have an initializer [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(492,18): error C2143: syntax error: missing ';' before ':' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(492,37): error C2143: syntax error: missing ';' before ')' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(493,17): error C3861: 'get_unit': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(500,32): error C3861: 'ut_building': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(502,24): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(503,6): error C3861: 'current_selection_clear': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(504,29): error C3861: 'current_selection_add': identifier not found [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(506,15): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(508,21): error C2065: 'current_selection': undeclared identifier [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(508,21): error C1003: error count exceeds 100; stopping compilation [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(197,31): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(197,17): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(203,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(204,33): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(282,29): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(282,15): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(1187,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(1192,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(2044,31): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(2460,79): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   Event.cpp
   ExplosionType.cpp
   Filters.cpp
@@ -208,8 +213,8 @@ D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(508,21): error C1003: error count 
   WeaponType.cpp
   Generating Code...
   BWAPILIB.vcxproj -> D:\a\Starcraft\Starcraft\build\lib\Release\BWAPILIB.lib
-  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/ExampleAIModule/CMakeLists.txt
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/TestAIModule/CMakeLists.txt
+  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/ExampleAIModule/CMakeLists.txt
   Dll.cpp
   AttackMoveTest.cpp
   AttackUnitTest.cpp
