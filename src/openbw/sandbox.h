@@ -1370,7 +1370,10 @@ struct play_ui : ui_functions {
 	const char* resources() {
 		int p = my_player, ri = (int)my_race;   // race index into the supply arrays
 		// Spectating: show the economy of whichever player's unit is selected.
-		if (spectator) if (unit_t* u = primary_selected(); u && u->owner < 8) { p = u->owner; ri = (int)unit_race(u); }
+		if (spectator) {
+			unit_t* u = primary_selected();
+			if (u && u->owner < 8) { p = u->owner; ri = (int)unit_race(u); }
+		}
 		int used = st.supply_used[p][ri].raw_value / 2;
 		int max = st.supply_available[p][ri].raw_value / 2;
 		if (max > 200) max = 200;
@@ -1735,7 +1738,9 @@ struct play_ui : ui_functions {
 			case C_BUILDMENU: menu = 1; refresh_card(); break;
 			case C_ADVMENU:   menu = 2; refresh_card(); break;
 			case C_BUILD:     pending_build = get_unit_type(c.ut); menu = 0; refresh_card(); break;
-			case C_TRAIN:     if (const unit_type_t* at = get_unit_type(c.ut); at && ut_addon(at)) {
+			case C_TRAIN: {
+			                  const unit_type_t* at = get_unit_type(c.ut);
+			                  if (at && ut_addon(at)) {
 			                      // Addons ask for a placement (like a building): drop it in place
 			                      // for no lift, or elsewhere to lift off and move there.
 			                      if (unit_t* b = primary_selected()) {
@@ -1744,6 +1749,7 @@ struct play_ui : ui_functions {
 			                      }
 			                  } else { sync_selection(); cmd_type(31, c.ut); }
 			                  break;
+			              }
 			case C_MORPH:     sync_selection(); cmd_type(35, c.ut); break;
 			case C_MORPHBLDG: sync_selection(); cmd_type(53, c.ut); break;
 			case C_SELECT:    select_units_of_type(c.ut); break;

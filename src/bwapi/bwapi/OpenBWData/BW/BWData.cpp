@@ -156,6 +156,19 @@ struct ui_functions: bwgame::ui_functions {
   }
 };
 
+// Cliente humano: la capa jugable de OpenBW Web (play_ui) mas el mismo hook de
+// dibujado que usa BWAPI para exponer el framebuffer (drawGameScreen).
+struct play_ui_functions: bwgame::play_ui {
+  using bwgame::play_ui::play_ui;
+
+  std::function<void(uint8_t*, size_t)> on_draw;
+
+  virtual void draw_callback(uint8_t* data, size_t data_pitch) override {
+    bwgame::play_ui::draw_callback(data, data_pitch);
+    if (on_draw) on_draw(data, data_pitch);
+  }
+};
+
 struct ui_wrapper {
   std::chrono::high_resolution_clock clock;
   std::chrono::high_resolution_clock::time_point last_update;
@@ -172,16 +185,31 @@ struct ui_wrapper {
   int screen_pos_x = 0;
   int screen_pos_y = 0;
   std::function<void(uint8_t*, size_t)> on_draw;
+  // Capa jugable (seleccion, ordenes, command card). Vive en el hilo de UI; el
+  // hilo de juego solo lee su flujo de comandos (ver drain_commands).
+  bwgame::play_ui* play = nullptr;
+  int local_player = -1;
   bwgame::game_player get_player(bwgame::state& st) {
     bwgame::game_player player;
     player.set_st(st);
     return player;
   }
-  ui_wrapper(bwgame::state& st, std::string mpq_path) {
+  ui_wrapper(bwgame::state& st, std::string mpq_path, int local_player) : local_player(local_player) {
 
-    ui_thread = ui_thread_t([this, player = get_player(st), mpq_path]() mutable {
+    ui_thread = ui_thread_t([this, player = get_player(st), mpq_path, local_player]() mutable {
       std::unique_lock<std::mutex> l(mut);
-      ui_functions ui(std::move(player));
+
+      // Slot local. -1 (replay/observador) => espectador: sin niebla propia y
+      // sin emitir ordenes.
+      int my_player = local_player;
+      bool spectator = my_player < 0 || my_player >= 12;
+      if (spectator) my_player = 0;
+      bwgame::race_t my_race = player.st().players[my_player].race;
+
+      play_ui_functions ui(std::move(player), my_player, my_race);
+      ui.spectator = spectator;
+      if (spectator) ui.fog_player = -1;   // observador: sin niebla
+      play = &ui;
 
       ui.exit_on_close = false;
       ui.global_volume = 0;
@@ -195,7 +223,14 @@ struct ui_wrapper {
       size_t screen_height = 600;
 
       ui.resize(screen_width, screen_height);
-      ui.screen_pos = {(int)ui.game_st.map_width / 2 - (int)screen_width / 2, (int)ui.game_st.map_height / 2 - (int)screen_height / 2};
+      // Arrancar mirando a la base del jugador (antes se abria en el centro del
+      // mapa y habia que buscar las unidades).
+      if (spectator) {
+        ui.screen_pos = {(int)ui.game_st.map_width / 2 - (int)screen_width / 2, (int)ui.game_st.map_height / 2 - (int)screen_height / 2};
+      } else {
+        bwgame::xy start = ui.game_st.start_locations[my_player];
+        ui.screen_pos = start - bwgame::xy((int)screen_width / 2, (int)screen_height / 2);
+      }
 
       ui.on_draw = [this, &ui](uint8_t* data, size_t data_pitch) {
         this->m_screen_buffer = data;
@@ -217,6 +252,7 @@ struct ui_wrapper {
         ui.update();
         window_closed = ui.window_closed;
       }
+      play = nullptr;
     });
 
   }
@@ -224,6 +260,15 @@ struct ui_wrapper {
     exit_thread = true;
     cv.notify_all();
     ui_thread.join();
+  }
+  // Recoge los comandos BW generados por el humano en el hilo de UI. El hilo de
+  // juego los pasa a input_action(), el mismo camino que usan las ordenes de los
+  // bots, para que viajen por el sync y se apliquen en todos los clientes.
+  void drain_commands(const std::function<void(const uint8_t*, size_t)>& f) {
+    std::unique_lock<std::mutex> l(mut);
+    if (!play || play->outgoing.empty()) return;
+    f(play->outgoing.data(), play->outgoing.size());
+    play->outgoing.clear();
   }
   void update() {
     auto now = clock.now();
@@ -827,9 +872,16 @@ struct openbwapi_impl {
 
   void next_frame() {
     if (!ui && ui_enabled) {
-      ui = std::make_unique<ui_wrapper>(st, game_setup_helper.env("OPENBW_MPQ_PATH", "."));
+      ui = std::make_unique<ui_wrapper>(st, game_setup_helper.env("OPENBW_MPQ_PATH", "."), vars.local_player_id);
     }
     if (ui) {
+      // Lo que el humano ordeno (clic derecho, command card, grupos) entra al
+      // lockstep como bytes de comando, igual que las ordenes de un bot.
+      if (!vars.is_replay) {
+        ui->drain_commands([this](const uint8_t* data, size_t size) {
+          game_setup_helper.input_action(data, size);
+        });
+      }
       auto l = ui->get_lock();
       if (vars.is_replay) {
         if (replay_funcs.is_done()) {
