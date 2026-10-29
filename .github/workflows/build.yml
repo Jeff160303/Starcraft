@@ -60,10 +60,19 @@ jobs:
       - name: Empaquetar
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+          # Con generadores multi-config, CMake agrega la subcarpeta de configuracion.
+          $bin = 'build/bin/Release'
+          if (-not (Test-Path "$bin/BWAPILauncher.exe")) {
+            $found = Get-ChildItem build -Recurse -Filter BWAPILauncher.exe | Select-Object -First 1
+            if (-not $found) { throw "No se genero BWAPILauncher.exe" }
+            $bin = $found.DirectoryName
+          }
+          Write-Host "Carpeta de binarios: $bin"
           New-Item -ItemType Directory -Force dist | Out-Null
-          Copy-Item build/bin/*.exe dist/
-          Copy-Item build/bin/*.dll dist/
-          Copy-Item "$env:SDL2_DIR/lib/x64/SDL2.dll" dist/
+          Copy-Item "$bin/*.exe" dist/ -Force
+          Copy-Item "$bin/*.dll" dist/ -Force
+          Copy-Item "$env:SDL2_DIR/lib/x64/SDL2.dll" dist/ -Force
           Get-ChildItem dist | Format-Table Name, @{n = 'MB'; e = { [math]::Round($_.Length / 1MB, 2) } }
 
       - name: Publicar artefacto
