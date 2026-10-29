@@ -1,8 +1,3 @@
-### Primeros 2 errores
-```
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1373,3): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1738,4): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-```
 ### configure.log (ultimas 50 de 50 lineas)
 ```
 -- Building for: Visual Studio 18 2026
@@ -46,7 +41,7 @@ to suppress it.
 -- Looking for pthread_create in pthread
 -- Looking for pthread_create in pthread - not found
 -- Found Threads: TRUE
--- Configuring done (23.1s)
+-- Configuring done (17.1s)
 -- Generating done (0.1s)
 CMake Warning (unused-cli):
   Manually-specified variables were not used by the project:
@@ -56,135 +51,121 @@ CMake Warning (unused-cli):
 
 -- Build files have been written to: D:/a/Starcraft/Starcraft/build
 ```
-### build.log (ultimas 200 de 409 lineas)
+### build.log (ultimas 200 de 638 lineas)
 ```
+          ]
+  
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(433,50): warning C4267: 'argument': conversion from 'size_t' to 'T', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(433,50): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(433,50): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(433,50): warning C4267:             T=uint32_t [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(433,50): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1851,70): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(436,30): warning C4267: 'argument': conversion from 'size_t' to 'T', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(436,30): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(436,30): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(436,30): warning C4267:             T=uint32_t [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(436,30): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
   (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
   
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1851,62): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1854,54): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1854,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,91): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,83): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,71): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1886,50): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1977,35): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1978,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,52): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(1979,27): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,77): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2029,65): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2151,77): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2151,63): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267: '=': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2205,90): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267: '=': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\ui\ui.h(2207,87): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,73): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267: 'argument': conversion from 'size_t' to 'utype', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:         with [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:         [ [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:             utype=int [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(378,49): warning C4267:         ] [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1373,3): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1738,4): error C2429: language feature 'init-statements in if/switch' requires compiler flag '/std:c++17' [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1897,9): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(1897,23): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-  Error.cpp
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(2533,10): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\openbw\sandbox.h(2533,29): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
-  
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(197,31): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(197,17): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(203,30): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(204,33): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(282,29): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(282,15): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(1187,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(1192,29): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(2044,31): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(2460,79): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
-  Event.cpp
-  ExplosionType.cpp
   Filters.cpp
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(380,32): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+      D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(380,32):
+      the template instantiation context (the oldest one first) is
+          D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(416,7):
+          while compiling class template member function 'void bwgame::data_loading::replay_file_writer<base_writer_T,true>::put_bytes(const uint8_t *,size_t)'
+          with
+          [
+              base_writer_T=bwgame::data_loading::file_writer<true>
+          ]
+              D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(635,15):
+              see the first reference to 'bwgame::data_loading::replay_file_writer<base_writer_T,true>::put_bytes' in 'bwgame::replay_saver_functions::save_replay'
+          with
+          [
+              base_writer_T=bwgame::data_loading::file_writer<true>
+          ]
+          D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(431,18):
+          see reference to function template instantiation 'void bwgame::data_loading::compress<true,bwgame::data_loading::vector_writer<dst_T,true>>(const uint8_t *,size_t,writer_T &)' being compiled
+          with
+          [
+              dst_T=std::vector<uint8_t,std::allocator<uint8_t>>,
+              writer_T=bwgame::data_loading::vector_writer<std::vector<uint8_t,std::allocator<uint8_t>>,true>
+          ]
+  
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(382,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(385,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(388,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
+D:\a\Starcraft\Starcraft\src\openbw\replay_saver.h(391,37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
   Forceset.cpp
+D:\a\Starcraft\Starcraft\src\openbw\sync.h(727,63): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+      D:\a\Starcraft\Starcraft\src\openbw\sync.h(727,63):
+      the template instantiation context (the oldest one first) is
+          D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(731,40):
+          see reference to function template instantiation 'void bwgame::sync_functions::sync<bwgame::sync_server_asio_tcp>(server_T &)' being compiled
+          with
+          [
+              server_T=bwgame::sync_server_asio_tcp
+          ]
+          D:\a\Starcraft\Starcraft\src\openbw\sync.h(1079,13):
+          see reference to class template instantiation 'bwgame::sync_functions::syncer_t<server_T>' being compiled
+          with
+          [
+              server_T=bwgame::sync_server_asio_tcp
+          ]
+          D:\a\Starcraft\Starcraft\src\openbw\sync.h(685,8):
+          while compiling class template member function 'void bwgame::sync_functions::syncer_t<server_T>::start_game(uint32_t)'
+          with
+          [
+              server_T=bwgame::sync_server_asio_tcp
+          ]
+              D:\a\Starcraft\Starcraft\src\openbw\sync.h(783,16):
+              see the first reference to 'bwgame::sync_functions::syncer_t<server_T>::start_game' in 'bwgame::sync_functions::syncer_t<server_T>::process_messages'
+          with
+          [
+              server_T=bwgame::sync_server_asio_tcp
+          ]
+              D:\a\Starcraft\Starcraft\src\openbw\sync.h(995,20):
+              see the first reference to 'bwgame::sync_functions::syncer_t<server_T>::process_messages' in 'bwgame::sync_functions::syncer_t<server_T>::sync'
+          with
+          [
+              server_T=bwgame::sync_server_asio_tcp
+          ]
+              D:\a\Starcraft\Starcraft\src\openbw\sync.h(1079,26):
+              see the first reference to 'bwgame::sync_functions::syncer_t<server_T>::sync' in 'bwgame::sync_functions::sync'
+          with
+          [
+              server_T=bwgame::sync_server_asio_tcp
+          ]
+          D:\a\Starcraft\Starcraft\src\openbw\sync.h(739,5):
+          see reference to function template instantiation 'auto bwgame::sync_functions::syncer_t<server_T>::start_game::<lambda_8295eec76c0076e22ad8033b2499cf98>::operator ()<bwgame::sync_functions::syncer_t<server_T>::start_game::<lambda_33d3606278f022044d1a25a4f78b66ba>>(bwgame::sync_functions::syncer_t<server_T>::start_game::<lambda_33d3606278f022044d1a25a4f78b66ba>) const' being compiled
+          with
+          [
+              server_T=bwgame::sync_server_asio_tcp
+          ]
+  
+D:\a\Starcraft\Starcraft\src\openbw\sync.h(732,62): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
+D:\a\Starcraft\Starcraft\src\openbw\sync.h(733,67): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
+D:\a\Starcraft\Starcraft\src\openbw\sync.h(764,30): warning C4244: '=': conversion from 'unsigned __int64' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
+D:\a\Starcraft\Starcraft\src\openbw\sync.h(766,24): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data [D:\a\Starcraft\Starcraft\build\bwapi\OpenBWData\OpenBWData.vcxproj]
+  (compiling source file '../../../src/bwapi/bwapi/OpenBWData/BW/BWData.cpp')
+  
   Game.cpp
   GameType.cpp
   Order.cpp
@@ -204,20 +185,33 @@ D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(2460,79): warn
   UnitCommandType.cpp
   UnitSizeType.cpp
   UnitType.cpp
+  Auto build dll exports
   UpgradeType.cpp
   WeaponType.cpp
+     Creating library D:/a/Starcraft/Starcraft/build/lib/Release/OpenBWData.lib and object D:/a/Starcraft/Starcraft/build/lib/Release/OpenBWData.exp
   Generating Code...
+  OpenBWData.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\OpenBWData.dll
   BWAPILIB.vcxproj -> D:\a\Starcraft\Starcraft\build\lib\Release\BWAPILIB.lib
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/TestAIModule/CMakeLists.txt
   Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/ExampleAIModule/CMakeLists.txt
+  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/BWAPI/CMakeLists.txt
   Dll.cpp
   AttackMoveTest.cpp
+  Auto build dll exports
+     Creating library D:/a/Starcraft/Starcraft/build/lib/Release/BWAPI.lib and object D:/a/Starcraft/Starcraft/build/lib/Release/BWAPI.exp
+  BWAPI.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\BWAPI.dll
+  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/BWAPIClient/CMakeLists.txt
+  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/bwapi/BWAPILauncher/CMakeLists.txt
+  Client.cpp
+  Main.cpp
   AttackUnitTest.cpp
+  BWAPIClient.vcxproj -> D:\a\Starcraft\Starcraft\build\lib\Release\BWAPIClient.lib
   ExampleAIModule.cpp
   BuildingPlacer.cpp
   Generating Code...
-  BuildTest.cpp
+  BWAPILauncher.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\BWAPILauncher.exe
      Creating library D:/a/Starcraft/Starcraft/build/lib/Release/ExampleAIModule.lib and object D:/a/Starcraft/Starcraft/build/lib/Release/ExampleAIModule.exp
+  BuildTest.cpp
   ExampleAIModule.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\ExampleAIModule.dll
   BurrowTest.cpp
   BWAssert.cpp
@@ -258,4 +252,5 @@ D:\a\Starcraft\Starcraft\src\bwapi\bwapi\OpenBWData\BW\BWData.cpp(2460,79): warn
   Generating Code...
      Creating library D:/a/Starcraft/Starcraft/build/lib/Release/TestAIModule.lib and object D:/a/Starcraft/Starcraft/build/lib/Release/TestAIModule.exp
   TestAIModule.vcxproj -> D:\a\Starcraft\Starcraft\build\bin\Release\TestAIModule.dll
+  Building Custom Rule D:/a/Starcraft/Starcraft/src/bwapi/CMakeLists.txt
 ```
