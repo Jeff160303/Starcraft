@@ -97,10 +97,12 @@ jobs:
             gh release create latest openbw-win64.zip --title "Ultima compilacion" --notes "Binarios de OpenBW + BWAPI generados automaticamente desde el codigo de main."
           }
 
-      # Si algo falla, dejamos el log en el resumen del job y en el repo:
-      # /actions/jobs/<id>/logs exige autenticacion, el repo no.
-      - name: Resumen del error
-        if: failure()
+      # Dejamos el resultado SIEMPRE en el repo. La API de GitHub tiene limite
+      # de peticiones (60/h sin token) y /actions/jobs/<id>/logs exige login,
+      # pero raw.githubusercontent.com no tiene ese limite: asi puedo leer el
+      # estado del build desde fuera sin autenticarme.
+      - name: Resumen y estado
+        if: always()
         shell: pwsh
         run: |
           $parts = @()
@@ -115,21 +117,30 @@ jobs:
               $parts += '```'
             }
           }
-          if ($parts.Count -eq 0) { $parts = @('No se genero ningun log.') }
+          if ($parts.Count -eq 0) { $parts += 'No se genero ningun log.' }
+          $result = '${{ job.status }}'
           $summary = $parts -join "`n"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $summary
           Set-Content -Path "ci-last-error.md" -Value $summary -Encoding utf8
+          $status = @(
+            "commit: ${{ github.sha }}",
+            "resultado: $result",
+            "fecha: $((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ'))",
+            "",
+            "Log (ultimas lineas de configure/build):",
+            $summary
+          ) -join "`n"
+          Set-Content -Path "ci-status.md" -Value $status -Encoding utf8
 
       # Los push hechos con GITHUB_TOKEN no vuelven a disparar workflows: no hay bucle.
-      - name: Guardar log en el repositorio
-        if: failure()
+      - name: Guardar estado en el repositorio
+        if: always()
         shell: pwsh
         run: |
-          if (-not (Test-Path "ci-last-error.md")) { exit 0 }
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f ci-last-error.md
+          git add -f ci-status.md ci-last-error.md
           if (-not (git diff --cached --quiet)) {
-            git commit -m "ci: log del ultimo error [skip ci]"
+            git commit -m "ci: estado del build (${{ job.status }}) [skip ci]"
             git push
           }
