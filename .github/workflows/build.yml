@@ -8,6 +8,9 @@ on:
 env:
   SDL2_VERSION: 2.30.9
 
+permissions:
+  contents: write
+
 jobs:
   windows:
     name: Windows x64 (MSVC)
@@ -86,3 +89,19 @@ jobs:
           $summary = $parts -join "`n"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $summary
           Set-Content -Path "ci-last-error.md" -Value $summary -Encoding utf8
+
+      # Deja el log en el repo: /actions/jobs/<id>/logs exige autenticacion,
+      # asi que esta es la forma de poder leerlo desde fuera. Los push hechos
+      # con GITHUB_TOKEN no vuelven a disparar workflows, no hay bucle.
+      - name: Guardar log en el repositorio
+        if: failure()
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "ci-last-error.md")) { exit 0 }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f ci-last-error.md
+          if (-not (git diff --cached --quiet)) {
+            git commit -m "ci: log del ultimo error [skip ci]"
+            git push
+          }
