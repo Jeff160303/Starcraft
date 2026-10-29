@@ -1,0 +1,15 @@
+# Datos del juego (86 MB, no se suben a git)
+/game/
+
+# Binarios compilados
+/dist/
+/build/
+
+# Descargas temporales
+*.zip
+*.7z
+
+# Visual Studio
+.vs/
+*.user
+*.suo

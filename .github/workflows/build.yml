@@ -1,0 +1,58 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  SDL2_VERSION: 2.30.9
+
+jobs:
+  windows:
+    name: Windows x64 (MSVC)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Descargar SDL2
+        shell: pwsh
+        run: |
+          $url = "https://github.com/libsdl-org/SDL/releases/download/release-$env:SDL2_VERSION/SDL2-devel-$env:SDL2_VERSION-VC.zip"
+          Write-Host "Descargando $url"
+          Invoke-WebRequest -Uri $url -OutFile "$env:RUNNER_TEMP\sdl2.zip"
+          Expand-Archive "$env:RUNNER_TEMP\sdl2.zip" -DestinationPath "$env:RUNNER_TEMP\sdl2" -Force
+          "SDL2_DIR=$env:RUNNER_TEMP\sdl2\SDL2-$env:SDL2_VERSION" >> $env:GITHUB_ENV
+
+      - name: Configurar CMake
+        shell: pwsh
+        run: |
+          cmake -S src/bwapi -B build -A x64 `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 `
+            -DOPENBW_DIR="${{ github.workspace }}/src/openbw" `
+            -DOPENBW_ENABLE_UI=ON `
+            -DSDL2_INCLUDE_DIR="$env:SDL2_DIR/include" `
+            -DSDL2_LIBRARY="$env:SDL2_DIR/lib/x64/SDL2.lib"
+
+      - name: Compilar
+        shell: pwsh
+        run: cmake --build build --config Release --parallel
+
+      - name: Empaquetar
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item build/bin/*.exe dist/
+          Copy-Item build/bin/*.dll dist/
+          Copy-Item "$env:SDL2_DIR/lib/x64/SDL2.dll" dist/
+          Get-ChildItem dist | Format-Table Name, @{n = 'MB'; e = { [math]::Round($_.Length / 1MB, 2) } }
+
+      - name: Publicar artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: openbw-win64
+          path: dist/
+          if-no-files-found: error
