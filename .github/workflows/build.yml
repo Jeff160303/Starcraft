@@ -73,6 +73,21 @@ jobs:
           path: dist/
           if-no-files-found: error
 
+      # Los artefactos de Actions piden login para descargarse. La release no.
+      - name: Publicar release
+        if: success()
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          Compress-Archive -Path dist\* -DestinationPath openbw-win64.zip -Force
+          gh release view latest 2>$null | Out-Null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload latest openbw-win64.zip --clobber
+          } else {
+            gh release create latest openbw-win64.zip --title "Ultima compilacion" --notes "Binarios de OpenBW + BWAPI generados automaticamente desde el codigo de main."
+          }
+
       # Si algo falla, dejamos el log en el resumen del job y en el repo:
       # /actions/jobs/<id>/logs exige autenticacion, el repo no.
       - name: Resumen del error
