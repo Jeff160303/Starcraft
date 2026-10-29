@@ -43,11 +43,18 @@ baja un pack de 15 mapas. Resultado en `game\`.
 ### 2. Compilar
 
 Cada `push` a `main` (o el boton **Run workflow** en la pestana *Actions*)
-compila y publica el artefacto **openbw-win64**.
+compila y publica los binarios. Hay dos formas de conseguirlos:
 
-1. GitHub -> *Actions* -> *build* -> ultima ejecucion.
-2. Descargar `openbw-win64.zip` (~20 MB).
-3. Descomprimirlo en `dist\` (debe quedar `dist\BWAPILauncher.exe`).
+**Opcion rapida (recomendada):**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\update-build.ps1
+```
+
+Descarga el `.zip` de la ultima compilacion y lo deja en `dist\`.
+
+**Opcion manual:** pagina *Releases* del repositorio ->
+`openbw-win64.zip` -> descomprimir en `dist\`.
 
 ### 3. Jugar
 

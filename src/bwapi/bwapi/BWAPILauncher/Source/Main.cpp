@@ -3,6 +3,14 @@
 #include "BW/BWData.h"
 
 #include <cstdio>
+#include <cstdlib>
+
+// Lee una variable de entorno tipo booleano (1/0, on/off, true/false).
+static bool env_flag(const char* name) {
+  const char* s = std::getenv(name);
+  if (!s || !*s) return false;
+  return !(s[0] == '0' || s[0] == 'n' || s[0] == 'N' || s[0] == 'f' || s[0] == 'F');
+}
 
 int main() {
 
@@ -28,7 +36,9 @@ int main() {
           h->update();
           h->bwgame.nextFrame();
 
-          if (!h->externalModuleConnected) {
+          // Un cliente humano con interfaz no carga modulo de IA. Sin
+          // OPENBW_ALLOW_NO_MODULE el launcher sale con "No module loaded".
+          if (!h->externalModuleConnected && !env_flag("OPENBW_ALLOW_NO_MODULE")) {
             printf("No module loaded, exiting\n");
             return 1;
           }

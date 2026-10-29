@@ -38,6 +38,8 @@ function New-OpenBWEnv {
 
   if ($Role -eq 'human') {
     $envs['OPENBW_ENABLE_UI'] = '1'
+    # El launcher exige un modulo de IA salvo que le digamos que es un humano.
+    $envs['OPENBW_ALLOW_NO_MODULE'] = '1'
   } else {
     if (-not $BotModule) { $BotModule = 'ExampleAIModule.dll' }
     $dll = $BotModule
